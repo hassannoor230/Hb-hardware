@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Plus, Search, Edit, Trash2, AlertCircle, X } from 'lucide-react'
-import axios from 'axios'
+import API from '../../components/utils/api'
 
 const demoServices = [
   { _id: 'demo-s1', name: 'Hardware Consultation', category: 'Consultation', description: 'Expert advice on hardware selection.', price: null, currency: 'PKR', status: 'approved' },
@@ -22,7 +22,7 @@ const AdminServices = () => {
     setLoading(true)
     setDbError(false)
     try {
-      const res = await axios.get('/api/v1/services')
+      const res = await API.get('/services')
       let data = res.data.data || []
       if (search) data = data.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()) || item.category.toLowerCase().includes(search.toLowerCase()))
       setItems(data)
@@ -52,9 +52,9 @@ const AdminServices = () => {
         image: form.image || null
       }
       if (editingItem) {
-        await axios.put(`/api/v1/services/${editingItem._id}`, payload)
+        await API.put(`/services/${editingItem._id}`, payload)
       } else {
-        await axios.post('/api/v1/services', payload)
+        await API.post('/services', payload)
       }
       setShowForm(false)
       setEditingItem(null)
@@ -90,7 +90,7 @@ const AdminServices = () => {
     }
     if (!window.confirm('Delete this service?')) return
     try {
-      await axios.delete(`/api/v1/services/${id}`)
+        await API.delete(`/services/${id}`)
       fetchItems()
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to delete service')

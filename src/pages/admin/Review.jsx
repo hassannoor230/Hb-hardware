@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle, XCircle, Eye, AlertCircle } from 'lucide-react'
-import axios from 'axios'
+import API from '../../components/utils/api'
 
 const demoPendingProducts = [
   { _id: 'demo-p1', name: 'Demo Steel Hinges', category: 'Door Hardware', description: 'Demo product created because API key is not configured.', price: 1200, currency: 'PKR', images: ['/images/door-hardware.jpg'], confidence: 0.5, status: 'pending' },
@@ -21,8 +21,8 @@ const Review = () => {
     setError(null)
     setDbError(false)
     try {
-      const endpoint = tab === 'products' ? '/api/v1/admin/pending-products' : '/api/v1/admin/pending-services'
-      const res = await axios.get(endpoint)
+      const endpoint = tab === 'products' ? '/admin/pending-products' : '/admin/pending-services'
+      const res = await API.get(endpoint)
       if (tab === 'products') setProducts(res.data.data || [])
       else setServices(res.data.data || [])
     } catch (error) {
@@ -45,8 +45,8 @@ const Review = () => {
       return
     }
     try {
-      const endpoint = tab === 'products' ? `/api/v1/admin/products/${id}/${status}` : `/api/v1/admin/services/${id}/${status}`
-      await axios.put(endpoint, { notes })
+      const endpoint = tab === 'products' ? `/admin/products/${id}/${status}` : `/admin/services/${id}/${status}`
+      await API.put(endpoint, { notes })
       await fetchPending()
     } catch (error) {
       alert(error.response?.data?.message || `Failed to ${status} item`)

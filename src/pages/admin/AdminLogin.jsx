@@ -28,6 +28,7 @@ const AdminLogin = () => {
 
       if (data.success) {
         localStorage.setItem('adminAuth', 'true')
+        localStorage.setItem('adminToken', data.token)
         setIsAuthenticated(true)
       } else if (res.status === 500 && data.message && data.message.includes('ADMIN_PASSWORD')) {
         setError('Admin password is not configured on the server. Set ADMIN_PASSWORD in Vercel env variables.')

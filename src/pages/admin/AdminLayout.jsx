@@ -25,6 +25,7 @@ const AdminLayout = ({ children }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('adminAuth')
+    localStorage.removeItem('adminToken')
     setIsAuthenticated(false)
   }
 

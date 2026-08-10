@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Upload, CheckCircle, XCircle, Loader, RefreshCw, Clock, AlertCircle } from 'lucide-react'
-import axios from 'axios'
+import API from '../../components/utils/api'
 
 const Import = () => {
   const [jobs, setJobs] = useState([])
@@ -17,7 +17,7 @@ const Import = () => {
   const fetchJobs = async () => {
     setLoading(true)
     try {
-      const res = await axios.get('/api/v1/import/jobs')
+      const res = await API.get('/import/jobs')
       setJobs(res.data.data || [])
     } catch (error) {
       console.error('Failed to fetch import jobs:', error)
@@ -35,7 +35,7 @@ const Import = () => {
     if (!googleUrl) return
     setSubmitting(true)
     try {
-      const res = await axios.post('/api/v1/import/google', { sourceUrl: googleUrl, label: googleLabel || 'Google Import' })
+      const res = await API.post('/import/google', { sourceUrl: googleUrl, label: googleLabel || 'Google Import' })
       if (res.data.data?.errorMessages?.length) {
         setDemoMode(true)
       }
@@ -54,7 +54,7 @@ const Import = () => {
     if (!fbContent.trim()) return
     setSubmitting(true)
     try {
-      const res = await axios.post('/api/v1/import/facebook', { sourceUrl: fbUrl || null, label: fbLabel || 'Facebook Import', manualContent: fbContent })
+      const res = await API.post('/import/facebook', { sourceUrl: fbUrl || null, label: fbLabel || 'Facebook Import', manualContent: fbContent })
       if (res.data.data?.errorMessages?.length) {
         setDemoMode(true)
       }

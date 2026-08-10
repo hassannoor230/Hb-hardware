@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Package, Wrench, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react'
-import axios from 'axios'
+import API from '../../components/utils/api'
 
 const Dashboard = () => {
   const [stats, setStats] = useState({ pendingProducts: 0, pendingServices: 0, approvedProducts: 0, approvedServices: 0 })
@@ -13,9 +13,9 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [statsRes, productsRes, servicesRes] = await Promise.all([
-          axios.get('/api/v1/admin/dashboard-stats').catch(() => ({ data: { data: {} } })),
-          axios.get('/api/v1/products?limit=5').catch(() => ({ data: { data: [] } })),
-          axios.get('/api/v1/services?limit=5').catch(() => ({ data: { data: [] } }))
+          API.get('/admin/dashboard-stats').catch(() => ({ data: { data: {} } })),
+          API.get('/products?limit=5').catch(() => ({ data: { data: [] } })),
+          API.get('/services?limit=5').catch(() => ({ data: { data: [] } }))
         ])
         setStats(statsRes.data.data || {})
         setRecentProducts(productsRes.data.data || [])

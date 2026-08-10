@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Plus, Search, Edit, Trash2, AlertCircle, X } from 'lucide-react'
-import axios from 'axios'
+import API from '../../components/utils/api'
 
 const demoProducts = [
   { _id: 'demo-1', name: 'Premium Door Hinges', category: 'Door Hardware', description: 'Heavy-duty stainless steel door hinges.', price: 1200, currency: 'PKR', images: ['/images/door-hardware.jpg'], status: 'approved' },
@@ -25,7 +25,7 @@ const AdminProducts = () => {
     setLoading(true)
     setDbError(false)
     try {
-      const res = await axios.get('/api/v1/products')
+      const res = await API.get('/products')
       let data = res.data.data || []
       if (search) data = data.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()) || item.category.toLowerCase().includes(search.toLowerCase()))
       setItems(data)
@@ -55,9 +55,9 @@ const AdminProducts = () => {
         images: form.images ? form.images.split(',').map((s) => s.trim()).filter(Boolean) : []
       }
       if (editingItem) {
-        await axios.put(`/api/v1/products/${editingItem._id}`, payload)
+        await API.put(`/products/${editingItem._id}`, payload)
       } else {
-        await axios.post('/api/v1/products', payload)
+        await API.post('/products', payload)
       }
       setShowForm(false)
       setEditingItem(null)
@@ -93,7 +93,7 @@ const AdminProducts = () => {
     }
     if (!window.confirm('Delete this product?')) return
     try {
-      await axios.delete(`/api/v1/products/${id}`)
+        await API.delete(`/products/${id}`)
       fetchItems()
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to delete product')
