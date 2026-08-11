@@ -4,7 +4,7 @@ const rawBase = (import.meta.env.VITE_API_URL || '').trim()
 const apiBaseUrl = rawBase ? rawBase.split(',')[0].trim() : ''
 
 const API = axios.create({
-  baseURL: apiBaseUrl ? `${apiBaseUrl}/api` : '/api',
+  baseURL: apiBaseUrl ? `${apiBaseUrl}/api/v1` : '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },

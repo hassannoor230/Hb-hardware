@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Lock, AlertCircle } from 'lucide-react'
+import API from '../../components/utils/api'
 
 const AdminLogin = () => {
   const [password, setPassword] = useState('')
@@ -17,16 +18,9 @@ const AdminLogin = () => {
     setIsLoading(true)
 
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_URL || ''
-      const res = await fetch(`${apiBaseUrl}/api/v1/admin/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password }),
-      })
+      const res = await API.post('/admin/login', { password })
 
-      const data = await res.json()
+      const data = res.data
 
       if (data.success && data.token) {
         localStorage.setItem('adminAuth', 'true')

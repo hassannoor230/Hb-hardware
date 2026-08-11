@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import axios from "axios";
+import API from "../utils/api";
 
 import Button from "../common/Button";
 import Toast from "../common/Toast";
@@ -44,7 +44,7 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post("/api/v1/contact", data);
+      await API.post("/contact", data);
 
       setToast({
         type: "success",
