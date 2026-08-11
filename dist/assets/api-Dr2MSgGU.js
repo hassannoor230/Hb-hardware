@@ -1,0 +1,2 @@
+import{c as o}from"./utils-bjNPEOrK.js";const t="https://hb-hardwarebackend.vercel.app/api",s=o.create({baseURL:`${t}/api`,headers:{"Content-Type":"application/json"}});s.interceptors.request.use(e=>{const r=localStorage.getItem("adminToken");return r&&(e.headers.Authorization=`Bearer ${r}`),e},e=>Promise.reject(e));s.interceptors.response.use(e=>e,e=>(e.response?console.error("API Error:",e.response.data):e.request?console.error("No response from server"):console.error("Error:",e.message),Promise.reject(e)));export{s as A};
+//# sourceMappingURL=api-Dr2MSgGU.js.map
