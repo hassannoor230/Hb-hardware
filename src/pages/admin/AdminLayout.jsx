@@ -11,13 +11,16 @@ const navItems = [
 ]
 
 const AdminLayout = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => localStorage.getItem('adminAuth') === 'true')
+  const hasAdminSession = () => (
+    localStorage.getItem('adminAuth') === 'true' && Boolean(localStorage.getItem('adminToken'))
+  )
+  const [isAuthenticated, setIsAuthenticated] = useState(hasAdminSession)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
 
   useEffect(() => {
     const handleStorageChange = () => {
-      setIsAuthenticated(localStorage.getItem('adminAuth') === 'true')
+      setIsAuthenticated(hasAdminSession())
     }
     window.addEventListener('storage', handleStorageChange)
     return () => window.removeEventListener('storage', handleStorageChange)

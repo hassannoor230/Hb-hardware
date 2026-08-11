@@ -7,7 +7,9 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(() => localStorage.getItem('adminAuth') === 'true')
+  const [isAuthenticated, setIsAuthenticated] = useState(() => (
+    localStorage.getItem('adminAuth') === 'true' && Boolean(localStorage.getItem('adminToken'))
+  ))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -26,10 +28,12 @@ const AdminLogin = () => {
 
       const data = await res.json()
 
-      if (data.success) {
+      if (data.success && data.token) {
         localStorage.setItem('adminAuth', 'true')
         localStorage.setItem('adminToken', data.token)
         setIsAuthenticated(true)
+      } else if (data.success) {
+        setError('Login succeeded but the server did not return an access token. Check JWT_SECRET in Vercel environment variables.')
       } else if (res.status === 500 && data.message && data.message.includes('ADMIN_PASSWORD')) {
         setError('Admin password is not configured on the server. Set ADMIN_PASSWORD in Vercel env variables.')
       } else {
